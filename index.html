@@ -64,91 +64,114 @@
 
 
         drawChart();
+        
 
         async function drawChart(){
 
-        // 得到資料才會往下走~
-        const dataRetun = await getData();
+            const urlAry = ['1101.TW.csv','2002.TW.csv','2330.TW.csv','2351.TW.csv','2454.TW.csv','2603.TW.csv','3035.TW.csv','3037.TW.csv'];
 
-        // Part 2 Data
-        const labels = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July'
-        ];
-        const data = {
-            labels: dataRetun.timelabels,
-            datasets: [
-                {
-                    label: 'My First dataset',
-                    fill: false,
-                    // backgroundColor: 'rgb(255, 99, 132)',
-                    backgroundColor: ['rgb(51, 51, 255)'], //blue
-                    borderColor:'rgb(191, 49, 44)',
-                    hoverBackgroundColor: ['rgb(255, 99, 40)'], //橘色
-                    // borderColor: 'rgb(255, 99, 132)',
-                    borderWidth:1,
-                    tension:0.1,
-                    // data: [15, 10, 5, 2, 20, 30, 45],
-                    data: dataRetun.myHigh,
-                },
-                {
-                    label: 'My First dataset',
-                    fill: false,
-                    // backgroundColor: 'rgb(255, 99, 132)',
-                    backgroundColor: ['rgb(51, 51, 255)'], //blue
-                    borderColor:'rgb(35, 153, 24)',
-                    hoverBackgroundColor: ['rgb(255, 99, 40)'], //橘色
-                    // borderColor: 'rgb(255, 99, 132)',
-                    borderWidth:1,
-                    // data: [20, 12, 8, 6, 25, 36, 35],
-                    data: dataRetun.myLow,
-                },
-            ]
-        };
+            let config = [];
 
-        // Part 1 設定
-        const config = {
-            type: 'line',
-            data: data,
-            plugins: [plugin]
-        };
+            let count = 0;
+            // 得到資料才會往下走~
+            for(i=0;i<urlAry.length;i++){
 
-        // Part 3 執行!
-        const myChart1 = new Chart(
-                            document.getElementById('myChart1').getContext('2d'),
-                            config);
-        const myChart2 = new Chart(
-                            document.getElementById('myChart2').getContext('2d'),
-                            config);
-        const myChart3 = new Chart(
-                            document.getElementById('myChart3').getContext('2d'),
-                            config);
-        const myChart4 = new Chart(
-                            document.getElementById('myChart4').getContext('2d'),
-                            config);
-        const myChart5 = new Chart(
-                            document.getElementById('myChart5').getContext('2d'),
-                            config);
-        const myChart6 = new Chart(
-                            document.getElementById('myChart6').getContext('2d'),
-                            config);
-        const myChart7 = new Chart(
-                            document.getElementById('myChart7').getContext('2d'),
-                            config);
-        const myChart8 = new Chart(
-                            document.getElementById('myChart8').getContext('2d'),
-                            config);
+            // urlAry.forEach((urlStr)=>{
+                console.log('urlAry.forEach:'+urlAry[i])
+                console.log('count:'+count)
+
+                const dataRetun = await getData(urlAry[i]);
+                console.log(dataRetun)
+
+                // Part 2 Data
+                const data = {
+                    labels: dataRetun.timelabels,
+                    datasets: [
+                        {
+                            label: urlAry[i],
+                            fill: false,
+                            // backgroundColor: 'rgb(255, 99, 132)',
+                            backgroundColor: ['rgb(51, 51, 255)'], //blue
+                            borderColor:'rgb(191, 49, 44)',
+                            hoverBackgroundColor: ['rgb(255, 99, 40)'], //橘色
+                            // borderColor: 'rgb(255, 99, 132)',
+                            borderWidth:1,
+                            tension:0.1,
+                            // data: [15, 10, 5, 2, 20, 30, 45],
+                            data: dataRetun.myHigh,
+                        },
+                        {
+                            label: '',
+                            fill: false,
+                            // backgroundColor: 'rgb(255, 99, 132)',
+                            backgroundColor: ['rgb(51, 51, 255)'], //blue
+                            borderColor:'rgb(35, 153, 24)',
+                            hoverBackgroundColor: ['rgb(255, 99, 40)'], //橘色
+                            // borderColor: 'rgb(255, 99, 132)',
+                            borderWidth:1,
+                            // data: [20, 12, 8, 6, 25, 36, 35],
+                            data: dataRetun.myLow,
+                        },
+                    ]
+                };
+
+
+                // 背景顏色
+                const plugin = {
+                id: 'custom_canvas_background_color',
+                beforeDraw: (chart) => {
+                    const ctx = chart.canvas.getContext('2d');
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'destination-over';
+                    ctx.fillStyle = '#b3b3ff'; //背景顏色HERE!
+                    ctx.fillRect(0, 0, chart.width, chart.height);
+                    ctx.restore();
+                    }
+                };
+
+                 // Part 1 設定
+                 config[count] = {
+                    type: 'line',
+                    data: data,
+                    plugins: [plugin]
+                };
+
+                count++;
+            // })
+
+            }
 
 
 
+            // Part 3 執行!
+            const myChart1 = new Chart(
+                                document.getElementById('myChart1').getContext('2d'),
+                                config[0]);
+            const myChart2 = new Chart(
+                                document.getElementById('myChart2').getContext('2d'),
+                                config[1]);
+            const myChart3 = new Chart(
+                                document.getElementById('myChart3').getContext('2d'),
+                                config[2]);
+            const myChart4 = new Chart(
+                                document.getElementById('myChart4').getContext('2d'),
+                                config[3]);
+            const myChart5 = new Chart(
+                                document.getElementById('myChart5').getContext('2d'),
+                                config[4]);
+            const myChart6 = new Chart(
+                                document.getElementById('myChart6').getContext('2d'),
+                                config[5]);
+            const myChart7 = new Chart(
+                                document.getElementById('myChart7').getContext('2d'),
+                                config[6]);
+            const myChart8 = new Chart(
+                                document.getElementById('myChart8').getContext('2d'),
+                                config[7]);
         }
 
-        async function getData(){
+        // 讀取csv取得資料
+        async function getData(urlStr){
 
             const myOpen = [];
             const myHigh = [];
@@ -156,11 +179,11 @@
             const myClose = [];
             const timelabels = [];
 
-            const url = '1101.csv';
-            const response = await fetch(url);
+            // const url = '1101.TW.csv';
+            const response = await fetch(urlStr);
             const tabledata = await response.text();
-            console.log(response);
-            console.log(tabledata);
+            // console.log(response);
+            // console.log(tabledata);
 
             // 資料處理 turn CSV object into Array by split
             // 切成以下狀態的 Array
@@ -170,12 +193,12 @@
                 '2021/1/12,43.04999924,42.70000076,43,42.70000076,12273333,39.88554382\r', '...
             */  
             const table = tabledata.split('\n') // CSV用 \n 分隔每一行  就組成一個string array
-            console.log(table);
+            // console.log(table);
             // ForEach
             //用slice 限制筆數
             table.slice(-60).forEach(row=>{
                 const column = row.split(',');
-                console.log(column);
+                // console.log(column);
 
                 /**
                   分割出來的 column 長相
@@ -190,24 +213,13 @@
                 myClose.push(column[4])
 
             });
-            console.log(timelabels);
-            console.log(myOpen);
+            // console.log(timelabels);
+            // console.log(myOpen);
 
             return ({timelabels,myOpen,myHigh,myLow,myClose})
         }
 
-        // 背景顏色
-        const plugin = {
-            id: 'custom_canvas_background_color',
-            beforeDraw: (chart) => {
-                const ctx = chart.canvas.getContext('2d');
-                ctx.save();
-                ctx.globalCompositeOperation = 'destination-over';
-                ctx.fillStyle = '#b3b3ff'; //背景顏色HERE!
-                ctx.fillRect(0, 0, chart.width, chart.height);
-                ctx.restore();
-            }
-        };
+
 
     </script>
 </body>
