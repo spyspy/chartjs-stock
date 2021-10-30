@@ -45,6 +45,12 @@
             <div class="col-lg-3 col-md-6 mb-3 mybox">
                 <canvas id="myChart6" class="mybox"></canvas>
             </div>
+            <div class="col-lg-3 col-md-6 mb-3 mybox">
+                <canvas id="myChart7" class="mybox"></canvas>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-3 mybox">
+                <canvas id="myChart8" class="mybox"></canvas>
+            </div>
 
         </div>
         <button class="btn btn-primary" onClick="getData()">Get Data</button>
@@ -130,6 +136,12 @@
                             config);
         const myChart6 = new Chart(
                             document.getElementById('myChart6').getContext('2d'),
+                            config);
+        const myChart7 = new Chart(
+                            document.getElementById('myChart7').getContext('2d'),
+                            config);
+        const myChart8 = new Chart(
+                            document.getElementById('myChart8').getContext('2d'),
                             config);
 
 
