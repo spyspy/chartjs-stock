@@ -11,7 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         .mybox{
-            border-radius: 3%;
+            border-radius: 15px;
         }
     </style>
     <title>Fetch CSV files in Chart JS</title>
@@ -20,36 +20,36 @@
 
 
     <div class="container-fluid bg-dark min-vh-100 d-flex flex-column">
-        <h3 class="text-warning text-center">Chart.js 3.6 Example</h3>
+        <h3 class="text-warning text-center">Chart.js 3.6(需要使用 Live Server)</h3>
 
         <div class="row p-5">
-            <div class="col-lg-3 col-md-6 mb-3">
+            <div class="col-lg-4 col-md-6 mb-3">
                 <canvas id="myChart1" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart2" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart3" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart4" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart5" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart6" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart7" class="mybox"></canvas>
             </div>
-            <div class="col-lg-3 col-md-6 mb-3 mybox">
+            <div class="col-lg-4 col-md-6 mb-3 mybox">
                 <canvas id="myChart8" class="mybox"></canvas>
             </div>
 
         </div>
-        <!-- <button class="btn btn-primary" onClick="getData()">Get Data</button> -->
+        <button class="btn btn-primary" onClick="getData()">Get Data</button>
     </div>
 
 
@@ -114,22 +114,38 @@
 
                 // 背景顏色
                 const plugin = {
-                id: 'custom_canvas_background_color',
-                beforeDraw: (chart) => {
-                    const ctx = chart.canvas.getContext('2d');
-                    ctx.save();
-                    ctx.globalCompositeOperation = 'destination-over';
-                    ctx.fillStyle = '#b3b3ff'; //背景顏色HERE!
-                    ctx.fillRect(0, 0, chart.width, chart.height);
-                    ctx.restore();
-                    }
+                    id: 'custom_canvas_background_color',
+                    beforeDraw: (chart) => {
+                        const ctx = chart.canvas.getContext('2d');
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-over';
+                        ctx.fillStyle = '#f5f5f5'; //背景顏色HERE!
+                        ctx.fillRect(0, 0, chart.width, chart.height);
+                        ctx.restore();
+                        }
                 };
 
                  // Part 1 設定
                  config[count] = {
                     type: 'line',
                     data: data,
-                    plugins: [plugin]
+                    plugins: [plugin],
+                    options: {
+                        scale:{
+                            x:{
+                                beginAtAero:true,
+                                ticks:{
+                                    display:false,
+                                    callback: function(value){
+                                        const valueLegend = this.getLabelForValue(value)
+                                    }
+                                }
+                            },
+                            y:{
+                                beginAtAero:true,
+                            }
+                        }    
+                    }
                 };
 
                 count++;
