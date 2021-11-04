@@ -9,9 +9,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.1/papaparse.min.js" integrity="sha512-EbdJQSugx0nVWrtyK3JdQQ/03mS3Q1UiAhRtErbwl1YL/+e2hZdlIcSURxxh7WXHTzn83sjlh2rysACoJGfb6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
-    <!--For Time Series-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
     <style>
         .mybox{
             border-radius: 15px;
@@ -23,7 +20,7 @@
 
 
     <div class="container-fluid bg-dark min-vh-100 d-flex flex-column">
-        <h3 class="text-warning text-center">@ 自動篩選強勢股Robot @</h3>
+        <h3 class="text-warning text-center">自動篩選強勢股Robot</h3>
 
         <div class="row p-5">
             <div class="col-lg-4 col-md-6 mb-3">
@@ -52,7 +49,7 @@
             </div>
 
         </div>
-        <button class="btn btn-primary" onClick="getData()">Get Data</button>
+        <!-- <button class="btn btn-primary" onClick="getData()">Get Data</button> -->
     </div>
 
 
@@ -62,34 +59,24 @@
         // https://www.chartjs.org/docs/latest/getting-started/
 
 
-        drawAllChart();
+        drawChart();
         
 
-        function drawAllChart(){
-            const aaurlAry = ['1101.TW.csv','2002.TW.csv','2330.TW.csv','2351.TW.csv','2454.TW.csv','2603.TW.csv','3035.TW.csv','3037.TW.csv'];
-            
-            for(i=0;i<aaurlAry.length;i++){
-                drawChart(aaurlAry[i],i)
+        async function drawChart(){
 
-            }
-
-        }
-
-
-        async function drawChart(urlAry,index){
-
+            const urlAry = ['1101.TW.csv','2002.TW.csv','2330.TW.csv','2351.TW.csv','2454.TW.csv','2603.TW.csv','3035.TW.csv','3037.TW.csv'];
 
             let config = [];
 
             let count = 0;
             // 得到資料才會往下走~
-            //for(i=0;i<urlAry.length;i++){
+            for(i=0;i<urlAry.length;i++){
 
             // urlAry.forEach((urlStr)=>{
-                //console.log('urlAry.forEach:'+urlAry[i])
-                //console.log('count:'+count)
+                console.log('urlAry.forEach:'+urlAry[i])
+                console.log('count:'+count)
 
-                const dataRetun = await getData(urlAry);
+                const dataRetun = await getData(urlAry[i]);
                 console.log(dataRetun)
 
                 // Part 2 Data
@@ -97,7 +84,7 @@
                     labels: dataRetun.timelabels,
                     datasets: [
                         {
-                            label: urlAry,
+                            label: urlAry[i],
                             fill: false,
                             // backgroundColor: 'rgb(255, 99, 132)',
                             backgroundColor: ['rgb(51, 51, 255)'], //blue
@@ -105,7 +92,7 @@
                             hoverBackgroundColor: ['rgb(255, 99, 40)'], //橘色
                             // borderColor: 'rgb(255, 99, 132)',
                             borderWidth:1,
-                            pointStyle:'rect',
+                            tension:0.1,
                             // data: [15, 10, 5, 2, 20, 30, 45],
                             data: dataRetun.myHigh,
                         },
@@ -118,7 +105,6 @@
                             hoverBackgroundColor: ['rgb(255, 99, 40)'], //橘色
                             // borderColor: 'rgb(255, 99, 132)',
                             borderWidth:1,
-                            pointBorderWidth:0.5,
                             // data: [20, 12, 8, 6, 25, 36, 35],
                             data: dataRetun.myLow,
                         },
@@ -140,33 +126,17 @@
                 };
 
                  // Part 1 設定
-                 //config[count] = {
-                 config = {
+                 config[count] = {
                     type: 'line',
                     data: data,
                     plugins: [plugin],
                     options: {
-                        layout: {
-                            padding: 5
-                        },
-                        plugins: {
-                            legend: {
-                              display: true,
-                              position:'top',
-                              title:{
-                                display:false,
-                                text:'WOW'     //畫面上方 Title
-                              }
-                            }
-                          },
                         scales:{
                             x:{
-                                //type:'timeseries',
+                                // type:'time',
                                 display: true,
                                 time: {
-                                    displayFormats: {
-                                        quarter: 'MM'
-                                    }
+                                    unit: 'month'
                                 },
                                 // beginAtAero:true,
                                 ticks:{
@@ -186,38 +156,38 @@
                     }
                 };
 
-                //count++;
+                count++;
             // })
 
-            //}
+            }
 
-            let nameOfChart = 'myChart'+(index+1)
+
 
             // Part 3 執行!
             const myChart1 = new Chart(
-                                document.getElementById(nameOfChart).getContext('2d'),
-                                config);
-            //const myChart2 = new Chart(
-            //                    document.getElementById('myChart2').getContext('2d'),
-            //                    config[1]);
-            //const myChart3 = new Chart(
-            //                    document.getElementById('myChart3').getContext('2d'),
-            //                    config[2]);
-            //const myChart4 = new Chart(
-            //                    document.getElementById('myChart4').getContext('2d'),
-            //                    config[3]);
-            //const myChart5 = new Chart(
-            //                    document.getElementById('myChart5').getContext('2d'),
-            //                    config[4]);
-            //const myChart6 = new Chart(
-            //                    document.getElementById('myChart6').getContext('2d'),
-            //                    config[5]);
-            //const myChart7 = new Chart(
-            //                    document.getElementById('myChart7').getContext('2d'),
-            //                    config[6]);
-            //const myChart8 = new Chart(
-            //                    document.getElementById('myChart8').getContext('2d'),
-            //                    config[7]);
+                                document.getElementById('myChart1').getContext('2d'),
+                                config[0]);
+            const myChart2 = new Chart(
+                                document.getElementById('myChart2').getContext('2d'),
+                                config[1]);
+            const myChart3 = new Chart(
+                                document.getElementById('myChart3').getContext('2d'),
+                                config[2]);
+            const myChart4 = new Chart(
+                                document.getElementById('myChart4').getContext('2d'),
+                                config[3]);
+            const myChart5 = new Chart(
+                                document.getElementById('myChart5').getContext('2d'),
+                                config[4]);
+            const myChart6 = new Chart(
+                                document.getElementById('myChart6').getContext('2d'),
+                                config[5]);
+            const myChart7 = new Chart(
+                                document.getElementById('myChart7').getContext('2d'),
+                                config[6]);
+            const myChart8 = new Chart(
+                                document.getElementById('myChart8').getContext('2d'),
+                                config[7]);
         }
 
         // 讀取csv取得資料
@@ -257,17 +227,16 @@
                  ['2021/10/29', '48.5', '48.20000076', '48.5', '48.25', '12583145', '48.25\r']
 
                  **/
-                //moment().format()
-                // timelabels.push(moment(column[0]).format())
-                timelabels.push((column[0]))
+
+                timelabels.push(column[0])
                 myOpen.push(column[1])
                 myHigh.push(column[2])
                 myLow.push(column[3])
                 myClose.push(column[4])
 
             });
-
-
+            // console.log(timelabels);
+            // console.log(myOpen);
 
             // 移除最後一筆資料
             timelabels.pop()
@@ -276,9 +245,6 @@
             myLow.pop()
             myClose.pop()
 
-            console.log('timelabels');
-            console.log(timelabels);
-            // console.log(myOpen);
             
             return ({timelabels,myOpen,myHigh,myLow,myClose})
         }
